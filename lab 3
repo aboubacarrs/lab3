@@ -1,0 +1,102 @@
+package Lab3;
+import java.util.Scanner;
+public class FoodTruck {
+final static double smallPizza = 8.9900;
+final static double smallToppings = 1.5000;
+final static double largePizza = 12.9900;
+final static double largeTopping = 2.5000;
+final static double softDrinks = 1.5000;
+final static double taxRate = .06;
+static int smallPizzaQuantity = 0,
+smallToppingQuantity = 0,
+largePizzaQuantity = 0,
+largeToppingQuantity = 0,
+softDrinkQuantity = 0;
+static double totalPreTax = 0;
+public static void displayMenu(){
+String[] menu = {"\t\t\t\tWelcome to David's Pizza! ", "\t\t\t\t\t301 Largo Road", "\t\t\t\t\t Largo, MD 20774"};
+for (int i = 0; i < menu.length; i++){
+System.out.println(menu[i]);
+}
+}
+public static void menu(Scanner scanner){
+System.out.println("How many small pizzas would you like? (each at: " + smallPizza + ")");
+smallPizzaQuantity = scanner.nextInt();
+System.out.println("How many small toppings would you like?(each at: " + smallToppings +")");
+smallToppingQuantity = scanner.nextInt ();
+System.out.println("How many large pizzas would you like?(each at: " + + largePizza + ")");
+largePizzaQuantity = scanner.nextInt ();
+System.out.println("How manny large topping would you like?(each at: " + largeTopping +")");
+largeToppingQuantity = scanner.nextInt();
+System.out.println("How many soft drinks would you like?(each at: " + softDrinks + ")");
+softDrinkQuantity = scanner.nextInt ();
+}
+public static double getTotalPreTax(){
+totalPreTax += smallPizza * smallPizzaQuantity;
+totalPreTax += smallToppings * smallToppingQuantity;
+totalPreTax += largePizza * largePizzaQuantity;
+totalPreTax += largeTopping * largeToppingQuantity;
+totalPreTax += softDrinks * softDrinkQuantity;
+return totalPreTax;
+}
+public static double salesTaxAmount(){
+double totalPrice = totalPreTax * taxRate;
+return totalPrice;
+}
+public static double amountTendered(double amountDue, Scanner scanner){
+double amountTendered = 0;
+while (true){
+System.out.println("Enter amount tendered: ");
+amountTendered = scanner.nextDouble();
+if (amountTendered < amountDue){
+System.out.println("Insufficient amount tendered.");
+continue;
+}
+break;
+}
+return amountTendered;
+}
+public static double theChange(double amountDue, Scanner scanner, double amountTendered){
+double theChange = amountTendered - amountDue;
+return theChange;
+}
+public static void receipt(double preTaxAmount, double salesTaxAmount, Scanner scanner, double amountTendered){
+displayMenu();
+System.out.println("Your order was: ");
+System.out.printf("%d Small pizzas @ %.4f each: $%.4f\n",smallToppingQuantity, smallPizza, smallToppingQuantity * smallPizza);
+System.out.printf("%d Small pizza toppings @ %.4f each: $%.4f\n", smallToppingQuantity, smallToppings, smallToppingQuantity * smallToppings);
+System.out.printf("%d Large pizzas @ %.4f each: $%.4f\n", largeToppingQuantity, largePizza, largeToppingQuantity * largePizza);
+System.out.printf("%d Large Pizza Toppings @ %.4f each: $%.4f\n", largeToppingQuantity, largeTopping, largeToppingQuantity * largeTopping);
+System.out.printf("%d Soft Drinks @ %.4f each: $%.4f\n", softDrinkQuantity, softDrinks, softDrinkQuantity * softDrinks);
+System.out.printf("Amount due for pizzas and drinks is: $%.4f\n",preTaxAmount);
+System.out.println("Sales tax amount is: " + salesTaxAmount);
+double total = preTaxAmount + salesTaxAmount;
+System.out.printf("Total amount due, including tax is: $%.4f\n", total);
+System.out.printf("Amount tendered: $%.4f\n", amountTendered);
+System.out.printf("Change: $%.4f\n", (amountTendered - total));
+}
+public static void all(Scanner scanner){
+// First function calculates the total of the items before the tax amount has been added and returns it.
+double preTaxAmount = getTotalPreTax();
+// calculates the sales tax amount based on the total of the items and stores it.
+double salesTaxAmount = salesTaxAmount();
+// calculates the total amount that the merchant owes
+double totalOwed = preTaxAmount + salesTaxAmount;
+// this function asks the user for the amount they'll be using to pay for their food.
+// If the amount is below the total owed, it asks them again until they've entered amount that is pays of their full balance.
+double amountTendered = amountTendered(totalOwed, scanner);
+// this method prints the store receipt with all items and prices.
+receipt(preTaxAmount, salesTaxAmount, scanner, amountTendered);
+}
+public static void main(String[] args){
+// Takes input from the user
+Scanner scanner = new Scanner(System.in);
+// Displays the menu
+// The menu has been stored in an array. The first function loops through the String array using a for loops and prints the store information
+displayMenu();
+// This function asks the user for the quantity of each item
+menu(scanner);
+// simplifies everything and breaks different functions into different methods.
+all(scanner);
+}
+}
